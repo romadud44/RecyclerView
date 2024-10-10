@@ -28,12 +28,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val path = "android.resource://com.example.recyclerview/"
-        val uri = Uri.parse(path + R.drawable.image_thing_1)
-        binding.btnTest.setOnClickListener {
-            binding.imageViewTest.setImageURI(Uri.parse(Thing.thingsDb[0].image))
-
-            }
         }
 
     }
