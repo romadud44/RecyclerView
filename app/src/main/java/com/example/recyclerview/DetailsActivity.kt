@@ -72,8 +72,6 @@ class DetailsActivity : AppCompatActivity() {
         binding.toolbarDetails.setTitle(thing?.name)
         binding.layoutDetailsLL.setOnLongClickListener {
             val dialog = AlertDialog.Builder(this)
-
-
             dialog.setView(updateDialog)
             val editId = updateDialog?.findViewById<EditText>(R.id.updateidET)
             val editName = updateDialog?.findViewById<EditText>(R.id.updateNameET)
