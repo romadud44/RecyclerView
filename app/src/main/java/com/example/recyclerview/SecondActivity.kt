@@ -1,19 +1,25 @@
 package com.example.recyclerview
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recyclerview.databinding.ActivitySecondBinding
 
+@Suppress("DEPRECATION")
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
+    private var listAdapter: CustomAdapter? = null
+    private val dataBase = DBHelper(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,9 +32,27 @@ class SecondActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        init()
+        viewDataAdapter()
         binding.recycleViewRV.layoutManager = LinearLayoutManager(this)
-        binding.recycleViewRV.adapter = CustomAdapter(Thing.things)
+        listAdapter = CustomAdapter(Thing.thingsDb)
+        binding.recycleViewRV.adapter = listAdapter
+        binding.recycleViewRV.setHasFixedSize(true)
+        listAdapter?.setOnThingClickListener(object :
+            CustomAdapter.OnThingClickListener {
+            override fun onThingClick(thing: Thing, position: Int) {
+                val intent = Intent(this@SecondActivity, DetailsActivity::class.java)
+                intent.putExtra("thing", thing)
+                launchSomeActivity.launch(intent)
+
+            }
+
+        })
     }
+
+
+
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_second, menu)
         return super.onCreateOptionsMenu(menu)
@@ -45,5 +69,39 @@ class SecondActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun viewDataAdapter() {
+        Thing.thingsDb = dataBase.readThing()
+        listAdapter = CustomAdapter(Thing.thingsDb)
+        binding.recycleViewRV.adapter = listAdapter
+        listAdapter?.notifyDataSetChanged()
+    }
+
+    private fun init() {
+        if (dataBase.readThing().isEmpty()) {
+            for ((id, i) in Thing.things.withIndex()) {
+                val thing = Thing(id, i.name, i.info, i.image)
+                dataBase.addThing(thing)
+            }
+            Thing.thingsDb = dataBase.readThing()
+        } else Thing.thingsDb = dataBase.readThing()
+    }
+    private val launchSomeActivity = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        result ->
+        if(result.resultCode == RESULT_OK) {
+            val data = result.data
+            val thingIn = data?.getParcelableExtra<Thing>("thingOut")
+            Toast.makeText(this, "Успех! ${thingIn.toString()}", Toast.LENGTH_LONG).show()
+            if (thingIn != null) {
+                dataBase.updateThing(thingIn)
+                viewDataAdapter()
+            }
+        } else {
+            Toast.makeText(this, "Не успех!", Toast.LENGTH_LONG).show()
+        }
     }
 }

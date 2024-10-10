@@ -5,7 +5,26 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
+
+    <ImageView
+
+        android:id="@+id/imageViewTest"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewTest" />
 
     <TextView
         android:id="@+id/textView"
@@ -21,11 +40,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:textSize="24sp"
         android:id="@+id/startBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/text_start_BTN"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

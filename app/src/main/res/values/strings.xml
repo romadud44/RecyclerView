@@ -5,4 +5,7 @@
     <string name="text_menu_exit">Выход</string>
     <string name="text_info_TV">Описание</string>
     <string name="text_name_TV">Название</string>
+    <string name="text_cancel_BTN">ОТМЕНА</string>
+    <string name="text_update_BTN">ИЗМЕНИТЬ</string>
+    <string name="text_id">id</string>
 </resources>
